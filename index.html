@@ -1,1 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALEC Chemical Management System</title>
 
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f4f4;
+margin:0;
+}
+
+header{
+background:#003366;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+header img{
+height:80px;
+}
+
+.container{
+width:90%;
+margin:auto;
+padding:20px;
+}
+
+input{
+width:100%;
+padding:15px;
+font-size:18px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+#chemicalList{
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<img src="assets/images.jpg">
+
+<h1>ALEC Chemical Management System</h1>
+
+<p>MSDS • COSHH • Chemical Register</p>
+
+</header>
+
+<div class="container">
+
+<input
+type="text"
+placeholder="Search Chemical">
+
+<div id="chemicalList"></div>
+
+</div>
+
+<script src="data.js"></script>
+
+</body>
+</html>

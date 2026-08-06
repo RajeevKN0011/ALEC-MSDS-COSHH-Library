@@ -66,6 +66,64 @@ placeholder="Search Chemical">
 
 <div id="chemicalList"></div>
 
+<script>
+const container = document.getElementById("chemicalList");
+
+chemicals.forEach(chemical => {
+
+let hazards = "";
+
+chemical.hazard.forEach(h => {
+
+if(h==="Corrosive")
+hazards += "🧪 ";
+
+if(h==="Health Hazard")
+hazards += "☣️ ";
+
+if(h==="Flammable")
+hazards += "🔥 ";
+
+if(h==="Toxic")
+hazards += "☠️ ";
+
+});
+
+container.innerHTML += `
+<div style="
+background:white;
+padding:20px;
+margin-top:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+">
+
+<h2>${chemical.name}</h2>
+
+<p><b>Manufacturer:</b> ${chemical.manufacturer}</p>
+
+<p><b>Type:</b> ${chemical.type}</p>
+
+<p><b>Expiry:</b> ${chemical.expiry}</p>
+
+<p><b>Hazards:</b> ${hazards}</p>
+
+<a href="${chemical.sds}" target="_blank">
+📄 Open SDS
+</a>
+
+<br><br>
+
+<a href="${chemical.coshh}" target="_blank">
+📋 Open COSHH
+</a>
+
+</div>
+`;
+
+});
+</script>
+
 </div>
 
 <script src="data.js"></script>

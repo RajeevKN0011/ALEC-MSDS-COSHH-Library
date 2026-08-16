@@ -3,142 +3,798 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALEC Chemical Management System</title>
+<title>ALEC MSDS & COSHH Library</title>
 
 <style>
+*{
+    box-sizing:border-box;
+}
 
 body{
-font-family:Arial,sans-serif;
-background:#f4f4f4;
-margin:0;
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#eef4f9;
+    color:#172b4d;
 }
 
-header{
-background:#003366;
-color:white;
-text-align:center;
-padding:20px;
+.header{
+    background:linear-gradient(110deg,#b51220,#8d1725,#183b68);
+    color:white;
+    text-align:center;
+    padding:28px 20px 30px;
 }
 
-header img{
-height:80px;
+.logo{
+    width:170px;
+    height:85px;
+    margin:0 auto 15px;
+    background:white;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    font-weight:900;
+    color:#073665;
+    letter-spacing:1px;
+}
+
+.header h1{
+    margin:5px 0 10px;
+    font-size:42px;
+}
+
+.header p{
+    margin:0;
+    font-size:20px;
 }
 
 .container{
-width:90%;
-margin:auto;
-padding:20px;
+    max-width:1700px;
+    margin:auto;
+    padding:28px 36px 50px;
 }
 
-input{
-width:100%;
-padding:15px;
-font-size:18px;
-border-radius:8px;
-border:1px solid #ccc;
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-bottom:25px;
 }
 
-#chemicalList{
-margin-top:20px;
+.stat{
+    color:white;
+    border-radius:16px;
+    padding:22px;
+    text-align:center;
+    box-shadow:0 5px 15px #0002;
 }
 
+.stat strong{
+    display:block;
+    font-size:42px;
+    margin-bottom:5px;
+}
+
+.stat span{
+    font-weight:bold;
+    letter-spacing:.5px;
+}
+
+.total{background:#c91f2d;}
+.flammable{background:#245587;}
+.sds{background:#19aa8b;}
+.coshh{background:#ed9710;}
+
+.hazards{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:22px;
+    margin:18px 0 25px;
+}
+
+.hazard{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.symbol{
+    width:32px;
+    height:32px;
+    border:3px solid #e3222d;
+    transform:rotate(45deg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:white;
+}
+
+.symbol span{
+    transform:rotate(-45deg);
+    font-size:18px;
+}
+
+.filters{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr auto;
+    gap:12px;
+    margin-bottom:35px;
+}
+
+input,select,button{
+    height:54px;
+    border:1px solid #ccd5df;
+    border-radius:10px;
+    background:white;
+    padding:0 16px;
+    font-size:16px;
+}
+
+button{
+    background:#c51d29;
+    color:white;
+    border:0;
+    font-weight:bold;
+    cursor:pointer;
+    padding:0 25px;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.card{
+    background:white;
+    border-radius:14px;
+    padding:16px;
+    box-shadow:0 4px 14px #0002;
+    border-top:6px solid #c51d29;
+    min-height:260px;
+    display:flex;
+    flex-direction:column;
+}
+
+.card:nth-child(4n+2){
+    border-top-color:#245587;
+}
+
+.card:nth-child(4n+3){
+    border-top-color:#19aa8b;
+}
+
+.card:nth-child(4n+4){
+    border-top-color:#8b3fc1;
+}
+
+.card h2{
+    font-size:21px;
+    margin:0 0 12px;
+    color:#172b4d;
+}
+
+.card .hazard-icons{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+}
+
+.card .mini{
+    width:38px;
+    height:38px;
+    border:3px solid #e3222d;
+    transform:rotate(45deg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:white;
+}
+
+.card .mini span{
+    transform:rotate(-45deg);
+    font-size:20px;
+}
+
+.hazard-text{
+    color:#60758d;
+    min-height:40px;
+    margin-bottom:15px;
+}
+
+.details{
+    margin-top:auto;
+    width:100%;
+    background:white;
+    color:#164d7b;
+    border:1px solid #cbd8e5;
+    height:48px;
+}
+
+.details:hover{
+    background:#edf5fb;
+}
+
+.empty{
+    grid-column:1/-1;
+    background:white;
+    padding:50px;
+    text-align:center;
+    border-radius:15px;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#0008;
+    z-index:1000;
+    padding:30px;
+    overflow:auto;
+}
+
+.modal-box{
+    max-width:800px;
+    margin:30px auto;
+    background:white;
+    border-radius:18px;
+    padding:30px;
+}
+
+.modal-box h2{
+    margin-top:0;
+    color:#173c67;
+}
+
+.modal-row{
+    padding:12px 0;
+    border-bottom:1px solid #e2e7ec;
+}
+
+.modal-row strong{
+    display:inline-block;
+    min-width:150px;
+}
+
+.close{
+    float:right;
+    background:#c51d29;
+    height:40px;
+    padding:0 18px;
+}
+
+@media(max-width:1100px){
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .filters{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:650px){
+    .container{
+        padding:18px;
+    }
+
+    .header h1{
+        font-size:28px;
+    }
+
+    .grid,
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .filters{
+        grid-template-columns:1fr;
+    }
+}
 </style>
-
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 </head>
 
 <body>
 
-<header>
-
-<img src="assets/images.jpg">
-
-<h1>ALEC Chemical Management System</h1>
-
-<p>MSDS • COSHH • Chemical Register</p>
-
+<header class="header">
+    <div class="logo">ALEC</div>
+    <h1>ALEC MSDS & COSHH Library</h1>
+    <p>Chemical Register • Safety Data • Hazard Information</p>
 </header>
 
-<div class="container">
+<main class="container">
 
-<input
-type="text"
-placeholder="Search Chemical">
+    <section class="stats">
+        <div class="stat total">
+            <strong id="totalCount">0</strong>
+            <span>TOTAL CHEMICALS</span>
+        </div>
 
-<div id="chemicalList"></div>
-<script src="data.js"></script>
+        <div class="stat flammable">
+            <strong id="flammableCount">0</strong>
+            <span>FLAMMABLE</span>
+        </div>
+
+        <div class="stat sds">
+            <strong id="sdsCount">0</strong>
+            <span>SDS</span>
+        </div>
+
+        <div class="stat coshh">
+            <strong id="coshhCount">0</strong>
+            <span>COSHH</span>
+        </div>
+    </section>
+
+    <section class="hazards">
+        <div class="hazard">⚠️ Explosive</div>
+        <div class="hazard">⭕ Oxidizing</div>
+        <div class="hazard">☠️ Acute Toxicity</div>
+        <div class="hazard">🧪 Corrosive</div>
+        <div class="hazard">🛢️ Gas Under Pressure</div>
+        <div class="hazard">🔥 Flammable</div>
+        <div class="hazard">🌳 Hazardous to Environment</div>
+        <div class="hazard">❗ Serious Health Hazard</div>
+        <div class="hazard">❗ Health Hazard / Irritant</div>
+    </section>
+
+    <section class="filters">
+        <input
+            id="search"
+            type="text"
+            placeholder="Search chemical, manufacturer, batch, hazard..."
+        >
+
+        <select id="hazardFilter">
+            <option value="">All GHS hazards</option>
+            <option value="flammable">Flammable</option>
+            <option value="corrosive">Corrosive</option>
+            <option value="health">Health</option>
+            <option value="environment">Environment</option>
+            <option value="toxic">Toxic</option>
+        </select>
+
+        <select id="manufacturerFilter">
+            <option value="">All manufacturers</option>
+        </select>
+
+        <select id="documentFilter">
+            <option value="">All document status</option>
+            <option value="sds">SDS Available</option>
+            <option value="coshh">COSHH Available</option>
+        </select>
+
+        <button onclick="clearFilters()">Clear</button>
+    </section>
+
+    <section id="chemicalGrid" class="grid"></section>
+
+</main>
+
+<div id="modal" class="modal">
+    <div class="modal-box">
+        <button class="close" onclick="closeModal()">Close</button>
+        <h2 id="modalTitle"></h2>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
 <script>
-const container = document.getElementById("chemicalList");
 
-chemicals.forEach(chemical => {
+let chemicals = [];
 
-let hazards = "";
+/*
+  Load the existing data.js file.
+  This allows the new dashboard to continue using
+  your existing chemical database.
+*/
+async function loadData(){
 
-chemical.hazard.forEach(h => {
+    try{
 
-if(h==="Corrosive")
-hazards += "🧪 ";
+        const response = await fetch("data.js");
+        const text = await response.text();
 
-if(h==="Health Hazard")
-hazards += "☣️ ";
+        const getData = new Function(
+            text +
+            "\nreturn typeof chemicals !== 'undefined' ? chemicals : " +
+            "typeof chemicalData !== 'undefined' ? chemicalData : " +
+            "typeof data !== 'undefined' ? data : [];"
+        );
 
-if(h==="Flammable")
-hazards += "🔥 ";
+        const result = getData();
 
-if(h==="Toxic")
-hazards += "☠️ ";
+        chemicals = Array.isArray(result) ? result : [];
 
-});
+    }catch(error){
 
-container.innerHTML += `
-<div style="
-background:white;
-padding:20px;
-margin-top:15px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
-">
+        console.error(error);
+        chemicals = [];
 
-<h2>${chemical.name}</h2>
+    }
 
-<p><b>Manufacturer:</b> ${chemical.manufacturer}</p>
+    updateDashboard();
+}
 
-<p><b>Type:</b> ${chemical.type}</p>
+function value(obj, keys){
 
-<p><b>Expiry:</b> ${chemical.expiry}</p>
+    for(const key of keys){
 
-<p><b>Hazards:</b> ${hazards}</p>
+        if(obj && obj[key] !== undefined && obj[key] !== null){
+            return obj[key];
+        }
 
-<div id="qrcode-${chemical.id}" style="margin-top:20px;"></div>
+    }
 
+    return "";
+}
 
+function textValue(obj, keys){
 
-<a href="${chemical.sds}" target="_blank">
-📄 Open SDS
-</a>
+    const v = value(obj,keys);
 
-<br><br>
+    if(Array.isArray(v)){
+        return v.join(", ");
+    }
 
-<a href="${chemical.coshh}" target="_blank">
-📋 Open COSHH
-</a>
+    return String(v || "");
+}
 
-</div>
-`;
-new QRCode(document.getElementById(`qrcode-${chemical.id}`), {
-text: new URL(chemical.sds, window.location.href).href,
-  width: 150,
-  height: 150
-});
-});
+function hazardText(item){
+
+    return (
+        textValue(item,[
+            "hazards",
+            "hazard",
+            "ghs",
+            "ghsHazards",
+            "hazardClass"
+        ]) || "Hazard information not specified"
+    );
+}
+
+function hasWord(item,word){
+
+    return hazardText(item).toLowerCase().includes(word);
+}
+
+function getName(item){
+
+    return value(item,[
+        "name",
+        "chemical",
+        "chemicalName",
+        "product",
+        "productName",
+        "title"
+    ]) || "Unnamed Chemical";
+}
+
+function getManufacturer(item){
+
+    return value(item,[
+        "manufacturer",
+        "maker",
+        "supplier",
+        "brand"
+    ]) || "Not specified";
+}
+
+function getSds(item){
+
+    return value(item,[
+        "sds",
+        "sdsUrl",
+        "sdsPath",
+        "sdsFile",
+        "SDS"
+    ]);
+}
+
+function getCoshh(item){
+
+    return value(item,[
+        "coshh",
+        "coshhUrl",
+        "coshhPath",
+        "coshhFile",
+        "COSHH"
+    ]);
+}
+
+function updateDashboard(){
+
+    document.getElementById("totalCount").textContent =
+        chemicals.length;
+
+    document.getElementById("flammableCount").textContent =
+        chemicals.filter(x=>hasWord(x,"flammable")).length;
+
+    document.getElementById("sdsCount").textContent =
+        chemicals.filter(x=>getSds(x)).length;
+
+    document.getElementById("coshhCount").textContent =
+        chemicals.filter(x=>getCoshh(x)).length;
+
+    populateManufacturers();
+    renderChemicals();
+}
+
+function populateManufacturers(){
+
+    const select =
+        document.getElementById("manufacturerFilter");
+
+    const manufacturers =
+        [...new Set(
+            chemicals
+            .map(x=>getManufacturer(x))
+            .filter(x=>x && x!=="Not specified")
+        )].sort();
+
+    select.innerHTML =
+        '<option value="">All manufacturers</option>';
+
+    manufacturers.forEach(name=>{
+
+        const option =
+            document.createElement("option");
+
+        option.value=name;
+        option.textContent=name;
+
+        select.appendChild(option);
+
+    });
+}
+
+function renderChemicals(){
+
+    const grid =
+        document.getElementById("chemicalGrid");
+
+    const search =
+        document.getElementById("search")
+        .value
+        .toLowerCase();
+
+    const hazard =
+        document.getElementById("hazardFilter")
+        .value
+        .toLowerCase();
+
+    const manufacturer =
+        document.getElementById("manufacturerFilter")
+        .value;
+
+    const documentStatus =
+        document.getElementById("documentFilter")
+        .value;
+
+    const filtered =
+        chemicals.filter(item=>{
+
+            const searchable =
+                JSON.stringify(item).toLowerCase();
+
+            if(search && !searchable.includes(search)){
+                return false;
+            }
+
+            if(manufacturer &&
+               getManufacturer(item)!==manufacturer){
+                return false;
+            }
+
+            if(hazard && !hasWord(item,hazard)){
+                return false;
+            }
+
+            if(documentStatus==="sds" && !getSds(item)){
+                return false;
+            }
+
+            if(documentStatus==="coshh" && !getCoshh(item)){
+                return false;
+            }
+
+            return true;
+
+        });
+
+    grid.innerHTML="";
+
+    if(filtered.length===0){
+
+        grid.innerHTML =
+            '<div class="empty">No chemicals found.</div>';
+
+        return;
+    }
+
+    filtered.forEach((item,index)=>{
+
+        const card =
+            document.createElement("article");
+
+        card.className="card";
+
+        const hazards =
+            hazardText(item);
+
+        let icons="";
+
+        if(hasWord(item,"flammable"))
+            icons+="<div class='mini'><span>🔥</span></div>";
+
+        if(hasWord(item,"corrosive"))
+            icons+="<div class='mini'><span>🧪</span></div>";
+
+        if(hasWord(item,"health"))
+            icons+="<div class='mini'><span>⚠️</span></div>";
+
+        if(hasWord(item,"environment"))
+            icons+="<div class='mini'><span>🌳</span></div>";
+
+        if(hasWord(item,"toxic"))
+            icons+="<div class='mini'><span>☠️</span></div>";
+
+        if(!icons)
+            icons="<div class='mini'><span>!</span></div>";
+
+        card.innerHTML=`
+            <h2>${index+1}. ${escapeHtml(getName(item))}</h2>
+
+            <div class="hazard-icons">
+                ${icons}
+            </div>
+
+            <div class="hazard-text">
+                ${escapeHtml(hazards)}
+            </div>
+
+            <button class="details">
+                View Details ▼
+            </button>
+        `;
+
+        card.querySelector(".details")
+            .addEventListener("click",()=>openModal(item));
+
+        grid.appendChild(card);
+
+    });
+}
+
+function openModal(item){
+
+    document.getElementById("modalTitle")
+        .textContent=getName(item);
+
+    const content =
+        document.getElementById("modalContent");
+
+    content.innerHTML="";
+
+    const fields=[
+        ["Manufacturer",getManufacturer(item)],
+        ["Hazards",hazardText(item)],
+        ["Type",textValue(item,["type","productType","category"])],
+        ["Batch",textValue(item,["batch","batchNo","batchNumber"])],
+        ["Expiry",textValue(item,["expiry","expiryDate","expires"])],
+        ["Quantity",textValue(item,["quantity","qty"])],
+        ["Status",textValue(item,["status","documentStatus"])]
+    ];
+
+    fields.forEach(([label,val])=>{
+
+        if(val){
+
+            const row=document.createElement("div");
+
+            row.className="modal-row";
+
+            row.innerHTML=
+                `<strong>${escapeHtml(label)}</strong>
+                 ${escapeHtml(String(val))}`;
+
+            content.appendChild(row);
+
+        }
+
+    });
+
+    const sds=getSds(item);
+    const coshh=getCoshh(item);
+
+    if(sds){
+
+        const row=document.createElement("div");
+
+        row.className="modal-row";
+
+        row.innerHTML=
+            `<strong>SDS</strong>
+             <a href="${sds}" target="_blank">
+             Open SDS Document
+             </a>`;
+
+        content.appendChild(row);
+    }
+
+    if(coshh){
+
+        const row=document.createElement("div");
+
+        row.className="modal-row";
+
+        row.innerHTML=
+            `<strong>COSHH</strong>
+             <a href="${coshh}" target="_blank">
+             Open COSHH Assessment
+             </a>`;
+
+        content.appendChild(row);
+    }
+
+    document.getElementById("modal")
+        .style.display="block";
+}
+
+function closeModal(){
+
+    document.getElementById("modal")
+        .style.display="none";
+}
+
+function clearFilters(){
+
+    document.getElementById("search").value="";
+    document.getElementById("hazardFilter").value="";
+    document.getElementById("manufacturerFilter").value="";
+    document.getElementById("documentFilter").value="";
+
+    renderChemicals();
+}
+
+function escapeHtml(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+document.getElementById("search")
+    .addEventListener("input",renderChemicals);
+
+document.getElementById("hazardFilter")
+    .addEventListener("change",renderChemicals);
+
+document.getElementById("manufacturerFilter")
+    .addEventListener("change",renderChemicals);
+
+document.getElementById("documentFilter")
+    .addEventListener("change",renderChemicals);
+
+loadData();
+
 </script>
-
-</div>
-
-
 
 </body>
 </html>

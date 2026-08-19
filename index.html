@@ -411,9 +411,8 @@ async function loadData(){
 
     try{
 
-        const sheetURL =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSX2a_MnoxOGWF4JNhXMDRI1pCjEMAmy1KSnDFCxezjqaSoKI3Yx5bLOoorLy1aXY2NAaKJU77PJJh_/pub?output=csv";
-
+       const sheetURL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vSX2a_MnoxOGWF4JNhXMDRI1pCjEMAmy1KSnDFCxezjqaSoKI3Yx5bLOoorLy1aXY2NAaKJU77PJJh_/pub?output=csv";
         const response = await fetch(sheetURL);
 
         if(!response.ok){

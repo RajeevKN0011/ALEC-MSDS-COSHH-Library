@@ -411,6 +411,235 @@ async function loadData(){
 
     try{
 
+        const sheetURL =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSX2a_MnoxOGWF4JNhXMDRI1pCjEMAmy1KSnDFCxezjqaSoKI3Yx5bLOoorLy1aXY2NAaKJU77PJJh_/pub?output=csv";
+
+        const response = await fetch(sheetURL);
+
+        if(!response.ok){
+            throw new Error("Unable to load Google Master Register");
+        }
+
+        const text = await response.text();
+
+        // Convert CSV text into rows
+        function parseCSV(csv){
+
+            const rows = [];
+            let row = [];
+            let value = "";
+            let insideQuotes = false;
+
+            for(let i = 0; i < csv.length; i++){
+
+                const char = csv[i];
+                const next = csv[i + 1];
+
+                if(char === '"' && insideQuotes && next === '"'){
+                    value += '"';
+                    i++;
+                }
+
+                else if(char === '"'){
+                    insideQuotes = !insideQuotes;
+                }
+
+                else if(char === ',' && !insideQuotes){
+                    row.push(value.trim());
+                    value = "";
+                }
+
+                else if((char === '\n' || char === '\r') && !insideQuotes){
+
+                    if(char === '\r' && next === '\n'){
+                        i++;
+                    }
+
+                    row.push(value.trim());
+                    value = "";
+
+                    if(row.some(cell => cell !== "")){
+                        rows.push(row);
+                    }
+
+                    row = [];
+                }
+
+                else{
+                    value += char;
+                }
+            }
+
+            if(value !== "" || row.length > 0){
+                row.push(value.trim());
+
+                if(row.some(cell => cell !== "")){
+                    rows.push(row);
+                }
+            }
+
+            return rows;
+        }
+
+        const rows = parseCSV(text);
+
+        if(rows.length < 2){
+            throw new Error("No chemical records found in Google Master Register");
+        }
+
+        // First row = column headings
+        const headers = rows[0].map(h =>
+            h.toLowerCase().trim()
+        );
+
+        const getColumn = (row, name) => {
+
+            const index = headers.indexOf(name.toLowerCase());
+
+            return index >= 0 ? (row[index] || "").trim() : "";
+        };
+
+        // Convert Google Sheet rows into website chemical objects
+        chemicals = rows.slice(1)
+            .filter(row => row.some(cell => cell.trim() !== ""))
+            .map((row, index) => {
+
+                const name = getColumn(row, "Chemical Name");
+                const pdfURL = getColumn(row, "PDF URL");
+                const category = getColumn(row, "Category");
+                const expiry = getColumn(row, "Expiry Date");
+
+                let status = "Valid";
+
+                if(expiry){
+
+                    let expiryDate = new Date(expiry);
+
+                    // Handle DD/MM/YYYY format
+                    if(isNaN(expiryDate.getTime())){
+
+                        const parts = expiry.split("/");
+
+                        if(parts.length === 3){
+
+                            const day = parseInt(parts[0], 10);
+                            const month = parseInt(parts[1], 10) - 1;
+                            const year = parseInt(parts[2], 10);
+
+                            expiryDate = new Date(year, month, day);
+                        }
+                    }
+
+                    if(!isNaN(expiryDate.getTime())){
+
+                        const today = new Date();
+
+                        today.setHours(0,0,0,0);
+                        expiryDate.setHours(0,0,0,0);
+
+                        if(expiryDate < today){
+                            status = "Expired";
+                        }
+                    }
+                }
+
+                // Convert category names into the website hazard names
+                const hazard = [];
+
+                if(category){
+
+                    const categories = category
+                        .split(",")
+                        .map(item => item.trim().toLowerCase());
+
+                    categories.forEach(item => {
+
+                        if(item.includes("flammable")){
+                            hazard.push("Flammable");
+                        }
+
+                        else if(item.includes("gas")){
+                            hazard.push("Gas Under Pressure");
+                        }
+
+                        else if(item.includes("corrosive")){
+                            hazard.push("Corrosive");
+                        }
+
+                        else if(item.includes("environment")){
+                            hazard.push("Hazardous to Environment");
+                        }
+
+                        else if(item.includes("health")){
+                            hazard.push("Health Hazard");
+                        }
+
+                        else if(item.includes("toxic")){
+                            hazard.push("Acute Toxicity");
+                        }
+
+                        else if(item.includes("oxid")){
+                            hazard.push("Oxidizing");
+                        }
+
+                        else if(item.includes("explos")){
+                            hazard.push("Explosive");
+                        }
+
+                    });
+                }
+
+                return {
+
+                    id: index + 1,
+
+                    name: name,
+
+                    manufacturer: "Not specified",
+
+                    type: category || "N/A",
+
+                    expiry: expiry,
+
+                    status: status,
+
+                    hazard: [...new Set(hazard)],
+
+                    sds: pdfURL,
+
+                    coshh: ""
+                };
+
+            });
+
+        console.log(
+            "Loaded chemicals from Google Master Register:",
+            chemicals.length
+        );
+
+        // Render the updated chemical database
+        renderChemicals();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Google Master Register loading error:",
+            error
+        );
+
+        // Keep the page from breaking
+        if(!Array.isArray(chemicals)){
+            chemicals = [];
+        }
+
+        renderChemicals();
+    }
+}
+
+    try{
+
         const response = await fetch("data.js");
         const text = await response.text();
 

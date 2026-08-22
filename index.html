@@ -637,28 +637,7 @@ async function loadData(){
     }
 }
 
-    try{
-
-        const response = await fetch("data.js");
-        const text = await response.text();
-
-        const getData = new Function(
-            text +
-            "\nreturn typeof chemicals !== 'undefined' ? chemicals : " +
-            "typeof chemicalData !== 'undefined' ? chemicalData : " +
-            "typeof data !== 'undefined' ? data : [];"
-        );
-
-        const result = getData();
-
-        chemicals = Array.isArray(result) ? result : [];
-
-    }catch(error){
-
-        console.error(error);
-        chemicals = [];
-
-    }
+  
 
     updateDashboard();
 }

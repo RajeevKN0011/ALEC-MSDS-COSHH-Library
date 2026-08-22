@@ -504,6 +504,7 @@ async function loadData(){
             .map((row, index) => {
 
                 const name = getColumn(row, "Chemical Name");
+                const manufacturer = getColumn(row, "Manufacturer");
                 const pdfURL = getColumn(row, "PDF URL");
                 const category = getColumn(row, "Category");
                 const expiry = getColumn(row, "Expiry Date");
@@ -594,7 +595,7 @@ async function loadData(){
 
                     name: name,
 
-                    manufacturer: "Not specified",
+                    manufacturer: manufacturer,
 
                     type: category || "N/A",
 

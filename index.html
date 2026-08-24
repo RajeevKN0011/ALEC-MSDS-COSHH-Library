@@ -508,6 +508,7 @@ async function loadData(){
                 const pdfURL = getColumn(row, "PDF URL");
                 const category = getColumn(row, "Category");
                 const expiry = getColumn(row, "Expiry Date");
+                const coshh = getColumn(row, "COSHH");
 
                 let status = "Valid";
 
@@ -607,7 +608,7 @@ async function loadData(){
 
                     sds: pdfURL,
 
-                    coshh: ""
+                   coshh: coshh
                 };
 
             });

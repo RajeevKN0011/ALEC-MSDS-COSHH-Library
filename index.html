@@ -308,6 +308,54 @@ button:hover{
         grid-template-columns:1fr;
     }
 }
+    /* GHS hazard symbol strip */
+.hazards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 14px 20px;
+    background: #ffffff;
+}
+
+.hazard {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    color: #172b4d;
+    white-space: nowrap;
+}
+
+.ghs-symbol {
+    width: 28px;
+    height: 28px;
+    border: 2.5px solid #d71920;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    transform: rotate(45deg);
+}
+
+@media (max-width: 900px) {
+    .hazards {
+        gap: 12px;
+    }
+
+    .hazard {
+        font-size: 12px;
+    }
+
+    .ghs-symbol {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+    }
+}
 </style>
 </head>
 
@@ -346,15 +394,42 @@ button:hover{
     </section>
 
     <section class="hazards">
-        <div class="hazard">⚠️ Explosive</div>
-        <div class="hazard">⭕ Oxidizing</div>
-        <div class="hazard">☠️ Acute Toxicity</div>
-        <div class="hazard">🧪 Corrosive</div>
-        <div class="hazard">🛢️ Gas Under Pressure</div>
-        <div class="hazard">🔥 Flammable</div>
-        <div class="hazard">🌳 Hazardous to Environment</div>
-        <div class="hazard">❗ Serious Health Hazard</div>
-        <div class="hazard">❗ Health Hazard / Irritant</div>
+      <div class="hazard">
+    <span class="ghs-symbol">💥</span>
+    <span>Explosive</span>
+</div>
+<div class="hazard">
+    <span class="ghs-symbol">⭕</span>
+    <span>Oxidizing</span>
+</div>
+<div class="hazard">
+    <span class="ghs-symbol">☠</span>
+    <span>Acute Toxicity</span>
+</div>
+<div class="hazard">
+    <span class="ghs-symbol">⚗</span>
+    <span>Corrosive</span>
+</div>
+<div class="hazard">
+    <span class="ghs-symbol">▰</span>
+    <span>Gas Under Pressure</span>
+</div>
+<div class="hazard">
+    <span class="ghs-symbol">🔥</span>
+    <span>Flammable</span>
+</div>
+<div class="hazard">
+    <span class="ghs-symbol">🌳</span>
+    <span>Hazardous to Environment</span>
+</div>
+<div class="hazard">
+    <span class="ghs-symbol">✚</span>
+    <span>Serious Health Hazard</span>
+</div>
+<div class="hazard">
+    <span class="ghs-symbol">!</span>
+    <span>Health Hazard / Irritant</span>
+</div>
     </section>
 
     <section class="filters">

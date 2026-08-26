@@ -194,19 +194,19 @@ button:hover{
 }
 
 .card .mini{
-    width:38px;
-    height:38px;
-    border:3px solid #e3222d;
-    transform:rotate(45deg);
+    width:52px;
+    height:52px;
     display:flex;
     align-items:center;
     justify-content:center;
     background:white;
 }
 
-.card .mini span{
-    transform:rotate(-45deg);
-    font-size:20px;
+.card .mini img{
+    width:50px;
+    height:50px;
+    object-fit:contain;
+    display:block;
 }
 
 .hazard-text{
@@ -926,24 +926,40 @@ function renderChemicals(){
 
         let icons="";
 
-        if(hasWord(item,"flammable"))
-            icons+="<div class='mini'><span>🔥</span></div>";
+const ghsIcon = (code, name) =>
+    `<div class="mini" title="${name}">
+        <img src="https://pubchem.ncbi.nlm.nih.gov/images/ghs/${code}.svg" alt="${name}">
+    </div>`;
 
-        if(hasWord(item,"corrosive"))
-            icons+="<div class='mini'><span>🧪</span></div>";
+if(hasWord(item,"explosive"))
+    icons += ghsIcon("GHS01","Explosive");
 
-        if(hasWord(item,"health"))
-            icons+="<div class='mini'><span>⚠️</span></div>";
+if(hasWord(item,"flammable"))
+    icons += ghsIcon("GHS02","Flammable");
 
-        if(hasWord(item,"environment"))
-            icons+="<div class='mini'><span>🌳</span></div>";
+if(hasWord(item,"oxidizing"))
+    icons += ghsIcon("GHS03","Oxidizing");
 
-        if(hasWord(item,"toxic"))
-            icons+="<div class='mini'><span>☠️</span></div>";
+if(hasWord(item,"gas"))
+    icons += ghsIcon("GHS04","Gas Under Pressure");
 
-        if(!icons)
-            icons="<div class='mini'><span>!</span></div>";
+if(hasWord(item,"corrosive"))
+    icons += ghsIcon("GHS05","Corrosive");
 
+if(hasWord(item,"toxic"))
+    icons += ghsIcon("GHS06","Acute Toxicity");
+
+if(hasWord(item,"irritant"))
+    icons += ghsIcon("GHS07","Health Hazard / Irritant");
+
+if(hasWord(item,"health"))
+    icons += ghsIcon("GHS08","Serious Health Hazard");
+
+if(hasWord(item,"environment"))
+    icons += ghsIcon("GHS09","Hazardous to Environment");
+
+if(!icons)
+    icons = ghsIcon("GHS07","Health Hazard / Irritant");
         card.innerHTML=`
             <h2>${index+1}. ${escapeHtml(getName(item))}</h2>
 

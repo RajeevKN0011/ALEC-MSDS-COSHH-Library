@@ -371,27 +371,59 @@ button:hover{
 
 <main class="container">
 
-    <section class="stats">
-        <div class="stat total">
-            <strong id="totalCount">0</strong>
-            <span>TOTAL CHEMICALS</span>
-        </div>
+  <section class="stats">
 
-        <div class="stat flammable">
-            <strong id="flammableCount">0</strong>
-            <span>FLAMMABLE</span>
-        </div>
+    <div class="stat flammable">
+        <strong id="flammableCount">0</strong>
+        <span>FLAMMABLE</span>
+    </div>
 
-        <div class="stat sds">
-            <strong id="sdsCount">0</strong>
-            <span>SDS</span>
-        </div>
+    <div class="stat corrosive">
+        <strong id="corrosiveCount">0</strong>
+        <span>CORROSIVE</span>
+    </div>
 
-        <div class="stat coshh">
-            <strong id="coshhCount">0</strong>
-            <span>COSHH</span>
-        </div>
-    </section>
+    <div class="stat reactive">
+        <strong id="reactiveCount">0</strong>
+        <span>REACTIVE</span>
+    </div>
+
+    <div class="stat toxic">
+        <strong id="toxicCount">0</strong>
+        <span>TOXIC</span>
+    </div>
+
+    <div class="stat health">
+        <strong id="healthCount">0</strong>
+        <span>HEALTH HAZARD</span>
+    </div>
+
+    <div class="stat irritant">
+        <strong id="irritantCount">0</strong>
+        <span>IRRITANT</span>
+    </div>
+
+    <div class="stat environmental">
+        <strong id="environmentalCount">0</strong>
+        <span>ENVIRONMENTAL</span>
+    </div>
+
+    <div class="stat sds">
+        <strong id="sdsCount">0</strong>
+        <span>SDS</span>
+    </div>
+
+    <div class="stat coshh">
+        <strong id="coshhCount">0</strong>
+        <span>COSHH</span>
+    </div>
+
+</section>
+
+<section class="total-chemicals">
+    <strong id="totalCount">0</strong>
+    <span>TOTAL CHEMICALS</span>
+</section>
 
     <section class="hazards">
 
@@ -834,18 +866,35 @@ function getCoshh(item){
 
 function updateDashboard(){
 
-    document.getElementById("totalCount").textContent =
-        chemicals.length;
+ document.getElementById("totalCount").textContent =
+    chemicals.length;
 
-    document.getElementById("flammableCount").textContent =
-        chemicals.filter(x=>hasWord(x,"flammable")).length;
+document.getElementById("flammableCount").textContent =
+    chemicals.filter(x => hasWord(x,"flammable")).length;
 
-    document.getElementById("sdsCount").textContent =
-        chemicals.filter(x=>getSds(x)).length;
+document.getElementById("corrosiveCount").textContent =
+    chemicals.filter(x => hasWord(x,"corrosive")).length;
 
-    document.getElementById("coshhCount").textContent =
-        chemicals.filter(x=>getCoshh(x)).length;
+document.getElementById("reactiveCount").textContent =
+    chemicals.filter(x => hasWord(x,"reactive") || hasWord(x,"oxidizing")).length;
 
+document.getElementById("toxicCount").textContent =
+    chemicals.filter(x => hasWord(x,"toxic")).length;
+
+document.getElementById("healthCount").textContent =
+    chemicals.filter(x => hasWord(x,"health")).length;
+
+document.getElementById("irritantCount").textContent =
+    chemicals.filter(x => hasWord(x,"irritant")).length;
+
+document.getElementById("environmentalCount").textContent =
+    chemicals.filter(x => hasWord(x,"environment")).length;
+
+document.getElementById("sdsCount").textContent =
+    chemicals.filter(x => getSds(x)).length;
+
+document.getElementById("coshhCount").textContent =
+    chemicals.filter(x => getCoshh(x)).length;
     populateManufacturers();
     renderChemicals();
 }
